@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const Koder = require('./koderModel')
 
 const server = express()
+server.use(express.json())
 
 const DB_USER = 'marykodemia'
 const DB_PASSWORD = 'Q450DOyJW4GFqgEp'
@@ -28,17 +29,25 @@ server.get('/koders', async (request, response)=>{
     })
 })
 
-server.post('/koders', async(request, response)=>{
+server.post('/koders', async(request, response) =>{
     console.log('entra a post koders', request.body)
     const name = request.body.name
     const lastName = request.body.lastName
     const gender = request.body.gender
     const age = request.body.age
     
-
-    const newKoder = {name, lastName, age, gender }
-
-    await Koder.create({ newKoder})
+    await Koder.create({ 
+        name:name,
+        lastName: lastName,
+        gender: gender,
+        age: age
+    })
+    .then((data)=>{
+        console.log('se agrego el koder')
+    })
+    .catch((error)=>{
+        console.error('existe un error', error)
+    })
     
 
     response.json({
